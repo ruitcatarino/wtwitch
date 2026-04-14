@@ -572,6 +572,12 @@ exit_script_on_failure()
 #######################################
 get_game_name()
 {
+  # Default to "No Category" if game_id is missing
+  if [[ -z "$1" ]]; then
+    printf "No Category"
+    return
+  fi
+
   # Add "id" prefix as jq does not accept numerical identifiers
   local -r gameID="id$1"
 
@@ -1151,13 +1157,14 @@ check_twitch_streams_helper()
 
   # Get stream game name from game ID
   local streamGame
-  streamGame="$(get_game_name "${streamerData[0]}")"
+  streamGame="$(get_game_name "${streamerData[0]:-}")"
 
   # Get streamer-set stream name
   # Truncate stream name if necessary; some streamers have stream titles longer
   # than the terminal width and cause ugly output
   local -r maxTitleLength="$(( TERMINAL_WIDTH - TITLE_CHARACTERS - ${#streamGame} - ${#2} - 2 ))"
-  local streamName="${streamerData[1]:0:${maxTitleLength}}"
+  local streamName="${streamerData[1]:-}"
+  streamName="${streamName:0:${maxTitleLength}}"
 
   if [[ "${#streamName}" == "${maxTitleLength}" ]]; then
     streamName+="…"
