@@ -470,6 +470,12 @@ TRANSLATIONS="$(cat <<EOF
     "de": "You need to install fzf to use this feature.",
     "es": "You need to install fzf to use this feature.",
     "fr": "You need to install fzf to use this feature."
+  },
+  "no_category": {
+    "en": "No Category",
+    "de": "Keine Kategorie",
+    "es": "Sin categoría",
+    "fr": "Pas de catégorie"
   }
 }
 EOF
@@ -574,7 +580,7 @@ get_game_name()
 {
   # Default to "No Category" if game_id is missing
   if [[ -z "$1" ]]; then
-    printf "No Category"
+    get_translation "no_category"
     return
   fi
 
